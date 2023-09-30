@@ -1,0 +1,155 @@
+[
+    {
+        "titulo": "marco polo",
+        "descripcion": "para cuadros",
+        "precio": "30$",
+        "thumbnail": "https://www.avalco.cl/3650-thickbox_default/escoba5costuras.jpg",
+        "code": "121123",
+        "stock": "12",
+        "id": 2
+    },
+    {
+        "titulo": "Escoba",
+        "descripcion": "barre piso",
+        "precio": "30$",
+        "thumbnail": "https://www.avalco.cl/3650-thickbox_default/escoba5costuras.jpg",
+        "code": "121123",
+        "stock": "10",
+        "id": 3
+    },
+    {
+        "titulo": "Escoba",
+        "descripcion": "barre piso",
+        "precio": "30$",
+        "thumbnail": "https://www.avalco.cl/3650-thickbox_default/escoba5costuras.jpg",
+        "code": "121123",
+        "stock": "10",
+        "id": 5
+    },
+    {
+        "titulo": "Escoba",
+        "descripcion": "barre piso",
+        "precio": "30$",
+        "thumbnail": "https://www.avalco.cl/3650-thickbox_default/escoba5costuras.jpg",
+        "code": "121123",
+        "stock": "10",
+        "id": 6
+    },
+    {
+        "titulo": "Escoba",
+        "descripcion": "barre piso",
+        "precio": "30$",
+        "thumbnail": "https://www.avalco.cl/3650-thickbox_default/escoba5costuras.jpg",
+        "code": "121123",
+        "stock": "10",
+        "id": 7
+    },
+    {
+        "titulo": "Escoba",
+        "descripcion": "barre piso",
+        "precio": "30$",
+        "thumbnail": "https://www.avalco.cl/3650-thickbox_default/escoba5costuras.jpg",
+        "code": "121123",
+        "stock": "10",
+        "id": 8
+    },
+    {
+        "titulo": "Escoba",
+        "descripcion": "barre piso",
+        "precio": "30$",
+        "thumbnail": "https://www.avalco.cl/3650-thickbox_default/escoba5costuras.jpg",
+        "code": "121123",
+        "stock": "10",
+        "id": 9
+    },
+    {
+        "titulo": "Escoba",
+        "descripcion": "barre piso",
+        "precio": "30$",
+        "thumbnail": "https://www.avalco.cl/3650-thickbox_default/escoba5costuras.jpg",
+        "code": "121123",
+        "stock": "10",
+        "id": 10
+    },
+    {
+        "titulo": "marco",
+        "descripcion": "para cuadros",
+        "precio": "30$",
+        "thumbnail": "https://www.avalco.cl/3650-thickbox_default/escoba5costuras.jpg",
+        "code": "121123",
+        "stock": "10",
+        "id": 11
+    },
+    {
+        "titulo": "masrco",
+        "descripcion": "para cuadros",
+        "precio": "30$",
+        "thumbnail": "https://www.avalco.cl/3650-thickbox_default/escoba5costuras.jpg",
+        "code": "121123",
+        "stock": "10",
+        "id": 12
+    },
+    {
+        "titulo": "marco",
+        "descripcion": "para cuadros",
+        "precio": "30$",
+        "thumbnail": "https://www.avalco.cl/3650-thickbox_default/escoba5costuras.jpg",
+        "code": "121123",
+        "stock": "10",
+        "id": 13
+    },
+    {
+        "titulo": "marco",
+        "descripcion": "para cuadros",
+        "precio": "30$",
+        "thumbnail": "https://www.avalco.cl/3650-thickbox_default/escoba5costuras.jpg",
+        "code": "121123",
+        "stock": "10",
+        "id": 14
+    },
+    {
+        "titulo": "Nueva Escoba updateada 10000",
+        "descripcion": "Nueva descripción",
+        "precio": "40$",
+        "thumbnail": "https://www.example.com/nueva-imagen.jpg",
+        "code": "121123",
+        "stock": "15",
+        "id": 15
+    },
+    {
+        "titulo": "marco",
+        "descripcion": "para cuadros",
+        "precio": "30$",
+        "thumbnail": "https://www.avalco.cl/3650-thickbox_default/escoba5costuras.jpg",
+        "code": "121123",
+        "stock": "10",
+        "id": 16
+    },
+    {
+        "titulo": "marco",
+        "descripcion": "para cuadros",
+        "precio": "30$",
+        "thumbnail": "https://www.avalco.cl/3650-thickbox_default/escoba5costuras.jpg",
+        "code": "121123",
+        "stock": "10",
+        "id": 17
+    },
+    {
+        "titulo": "marco",
+        "descripcion": "para cuadros",
+        "precio": "30$",
+        "thumbnail": "https://www.avalco.cl/3650-thickbox_default/escoba5costuras.jpg",
+        "code": "121123",
+        "stock": "10",
+        "id": 18
+    },
+    {
+        "titulo": "marco",
+        "descripcion": "para cuadros",
+        "precio": "30$",
+        "thumbnail": "https://www.avalco.cl/3650-thickbox_default/escoba5costuras.jpg",
+        "code": "121123",
+        "stock": "10",
+        "id": 19
+    }
+]
