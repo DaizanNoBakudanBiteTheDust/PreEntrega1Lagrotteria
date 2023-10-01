@@ -54,6 +54,8 @@ class ProductManager {
         }
     }
 
+    // Obtiene por ID
+
     getProductById = async (idProduct) => {
 
         const products = await this.getProducts();
@@ -70,6 +72,8 @@ class ProductManager {
 
     }
 
+
+    // Borra producto
     deleteProductById = async (idProduct) => {
 
         const products = await this.getProducts();
@@ -88,13 +92,12 @@ class ProductManager {
             console.log('Producto eliminado con éxito');
             return true;
         }
-
-
     }
+
+    // Actualiza productos
 
     updateProduct = async (idProduct, updatedProduct) => {
         const products = await this.getProducts();
-
         const indexProduct = products.findIndex(product => product.id === idProduct);
 
         if (indexProduct === -1) {
@@ -105,7 +108,7 @@ class ProductManager {
                 ...updatedProduct, // Copia todas las propiedades del producto actualizado
             }
 
-            await promises.writeFile(this.path, JSON.stringify(updatedProducts, null, 4));
+            await promises.writeFile(this.path, JSON.stringify(products, null, 4));
 
         }
 

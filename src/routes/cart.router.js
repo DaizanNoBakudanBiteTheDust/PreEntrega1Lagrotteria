@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 const router = Router();
-const cart = [];
+const products = [];
 
 //Obtener el listado de mascotas
 router.get('/', (req, res) => {
@@ -16,7 +16,7 @@ router.use((req, res, next) => {
 
 // traer todos los productos
 
-app.get('/', async (req, res) => {
+router.get('/', async (req, res) => {
     const products = await manager.getProducts();
     const queryParamsLimited = (req.query.limit);
 
