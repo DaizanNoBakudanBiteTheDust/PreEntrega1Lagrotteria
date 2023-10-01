@@ -1,5 +1,7 @@
 import express from 'express';
 import ProductManager from './managers/productManager.js';
+import productRouter from './routes/products.router.js';
+import cartRouter from './routes/cart.router.js';
 
 // Crea server express
 const app = express();
@@ -15,6 +17,10 @@ app.use(express.urlencoded({
 
 
 app.use(express.static('public'))
+
+
+app.use('/api/products', productRouter);
+app.use('/api/cart', cartRouter);
 
 // traer todos los productos
 
