@@ -35,7 +35,7 @@ router.post('/', async (req, res) => {
     // Productos que haremos con Postman
     const product = req.body;
 
-    if (!product.titulo || !product.descripcion || !product.precio || !product.thumbnail || !product.thumbnail || !product.code || !product.stock) {
+    if (!product.titulo || !product.descripcion || !product.precio || !product.thumbnail || !product.thumbnail || !product.code || !product.stock || !product.category) {
             //Error del cliente
             return res.status(400).send({
                     status: 'error',
@@ -43,11 +43,18 @@ router.post('/', async (req, res) => {
             })
     }
 
-    if (products.length === 0) {
-            product.id = 1;
-    } else {
-            product.id = products[products.length - 1].id + 1;
-    }
+     // Obtener un array con todos los "id" existentes ( hice esto porque al eliminar productos seguia sumando indefinido y necesitaba rellenar id)
+     const existingIds = products.map(p => p.id);
+
+     // Encontrar el primer "id" que falta
+     let newId = 1;
+     while (existingIds.includes(newId)) {
+         newId++;
+     }
+ 
+     // Asignar el "id" encontrado al producto
+     product.id = newId;
+    
 
     await manager.addProducts(product);
 
@@ -68,7 +75,7 @@ router.put('/:pid', async (req, res) => {
     const product = req.body;
     const productId = Number(req.params.pid);
 
-    if (!product.titulo || !product.descripcion || !product.precio || !product.thumbnail || !product.thumbnail || !product.code || !product.stock) {
+    if (!product.titulo || !product.descripcion || !product.precio || !product.thumbnail || !product.thumbnail || !product.code || !product.stock || !product.status || !product.category) {
             //Error del cliente
             return res.status(400).send({
                     status: 'error',

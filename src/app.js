@@ -14,7 +14,7 @@ app.use(express.urlencoded({
 
 app.use(express.static('public'))
 
-
+// Llama a la ruta de product Router (Todo lo hecho hasta ahora)
 app.use('/api/products', productRouter);
 
 /*

@@ -1,20 +1,20 @@
 import { Router } from 'express';
+import ProductManager from '../managers/productManager.js';
+const manager = new ProductManager('./src/files/productos.json');
+
 
 const router = Router();
-const products = [];
-
-//Obtener el listado de mascotas
-router.get('/', (req, res) => {
-    res.send({ status: 'success', payload: pets });
-});
-
-//Middleware a nivel de router
-router.use((req, res, next) => {
-    console.log('Time Router: ', Date.now());
-    next();
-});
 
 // traer todos los productos
+
+router.get('/', async (req, res) =>{
+    const products = await manager.getProducts();
+    console.log(products)
+    res.send(products)
+    });
+
+    // params
+
 
 router.get('/', async (req, res) => {
     const products = await manager.getProducts();
@@ -26,17 +26,16 @@ router.get('/', async (req, res) => {
             const productsLimited = products.slice(0, queryParamsLimited)
             res.send(productsLimited)
     };
-    res.send(products);
 });
 
 // postea los productos
 
-app.post('/', async (req, res) => {
+router.post('/', async (req, res) => {
     const products = await manager.getProducts();
     // Productos que haremos con Postman
     const product = req.body;
 
-    if (!product.titulo || !product.descripcion || !product.precio || !product.thumbnail || !product.thumbnail || !product.code || !product.stock) {
+    if (!product.titulo || !product.descripcion || !product.precio || !product.thumbnail || !product.thumbnail || !product.code || !product.stock || !product.category) {
             //Error del cliente
             return res.status(400).send({
                     status: 'error',
@@ -44,11 +43,18 @@ app.post('/', async (req, res) => {
             })
     }
 
-    if (products.length === 0) {
-            product.id = 1;
-    } else {
-            product.id = products[products.length - 1].id + 1;
-    }
+     // Obtener un array con todos los "id" existentes ( hice esto porque al eliminar productos seguia sumando indefinido y necesitaba rellenar id)
+     const existingIds = products.map(p => p.id);
+
+     // Encontrar el primer "id" que falta
+     let newId = 1;
+     while (existingIds.includes(newId)) {
+         newId++;
+     }
+ 
+     // Asignar el "id" encontrado al producto
+     product.id = newId;
+    
 
     await manager.addProducts(product);
 
@@ -62,12 +68,12 @@ app.post('/', async (req, res) => {
 
 // Actualiza los productos
 
-app.put('/products/:id', async (req, res) => {
+router.put('/:pid', async (req, res) => {
 
     const products = await manager.getProducts();
     // Productos que haremos con Postman
     const product = req.body;
-    const productId = Number(req.params.id);
+    const productId = Number(req.params.pid);
 
     if (!product.titulo || !product.descripcion || !product.precio || !product.thumbnail || !product.thumbnail || !product.code || !product.stock) {
             //Error del cliente
@@ -98,8 +104,10 @@ app.put('/products/:id', async (req, res) => {
 
 // Elimina los productos
 
-app.delete('/products/:id', async (req, res) => {
-    const productId = Number(req.params.id);
+router.delete('/:pid', async (req, res) => {
+    const products = await manager.getProducts();
+    
+    const productId = Number(req.params.pid);
 await manager.deleteProductById(productId);
     const index = products.findIndex(product => product.id === productId);
 

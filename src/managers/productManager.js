@@ -29,19 +29,12 @@ class ProductManager {
         try {
             const products = await this.getProducts();
 
-            const existingProduct = products.find((p) => p.code === producto.code);
+            const existingProduct = products.find((p) => p.id === producto.id);
             // verifica si existe
             if (existingProduct) {
                 console.log("El producto existe");
                 return null;
             }
-
-            if (products.length === 0) {
-                product.id = 1;
-            } else {
-                product.id = products[products.length - 1].id + 1;
-            }
-
             // se agrega el producto
             products.push(producto);
 
@@ -50,7 +43,8 @@ class ProductManager {
             return producto;
 
         } catch (error) {
-            console.log(error)
+            console.log(error);
+            return null
         }
     }
 
