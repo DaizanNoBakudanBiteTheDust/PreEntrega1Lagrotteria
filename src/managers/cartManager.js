@@ -66,6 +66,26 @@ class cartManager {
 
     }
 
+    //Actualiza
+
+    updateProduct = async (idProduct, updatedProduct) => {
+        const products = await this.getProducts();
+        const indexProduct = products.findIndex(product => product.id === idProduct);
+
+        if (indexProduct === -1) {
+            console.log("No existe el producto")
+        } else {
+            products[indexProduct] = {
+                ...products[indexProduct], // Copia todas las propiedades del producto existente
+                ...updatedProduct, // Copia todas las propiedades del producto actualizado
+            }
+
+            await promises.writeFile(this.path, JSON.stringify(products, null, 4));
+
+        }
+
+    }
+
 
 }
 
