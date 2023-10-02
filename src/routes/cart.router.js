@@ -99,7 +99,7 @@ router.post('/:cid/products/pid', async (req, res) => {
         // verifica si existe
 
         const indexProductInCart = cartById.products.findIndex(product => product.id === parseInt(pid));
-        if (indexProductInCart === -1) {
+        if (indexProductInCart !== -1) {
                 cartById.products[indexProductInCart].quantity++;
         } else {
                 cartById.products.push({
