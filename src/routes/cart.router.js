@@ -2,7 +2,9 @@ import {
         Router
 } from 'express';
 import cartManager from '../managers/cartManager.js';
-const manager = new cartManager('./src/files/carrito.json');
+import { cartsFilePath } from '../utils.js';
+
+const manager = new cartManager(cartsFilePath);
 
 
 const router = Router();
@@ -40,16 +42,8 @@ router.post('/', async (req, res) => {
         // Productos que haremos con Postman
         const cart = req.body;
 
-        if (!cart.products) {
-                // Error del cliente
-                return res.status(400).send({
-                  status: 'error',
-                  error: 'incomplete values'
-                });
-              }
-
-         // Obtener un array con todos los "id" existentes 
-        const existingIds = carts.map(p => p.id);     
+        // Obtener un array con todos los "id" existentes 
+        const existingIds = carts.map(p => p.id);
 
         // Encontrar el primer "id" que falta
         let newId = 1;
@@ -59,6 +53,14 @@ router.post('/', async (req, res) => {
 
         // Asignar el "id" encontrado al producto
         cart.id = newId;
+
+        if (!cart.products) {
+                // Error del cliente
+                return res.status(400).send({
+                        status: 'error',
+                        error: 'incomplete values'
+                });
+        }
 
 
         await manager.addProducts(cart);
@@ -74,48 +76,71 @@ router.post('/', async (req, res) => {
 
 router.post('/:cid/products/pid', async (req, res) => {
 
-        const cart = Number(req.params.cid);
-        const product = Number(req.params.pid);
+        const carts = await manager.getAll();
 
-        // actualiza
+        // utilizo params de carrito y producto
 
-       const updateProduct = await manager.updateProduct(cart, product);
-        
-       if(updateProduct){
-        res.send({
-                status: 'success',
-                message: 'product updated',
-                product
-        });
-       }else {
-        //Error del cliente
-        return res.status(404).send({
-                status: 'error',
-                error: 'product not found'
-        })
-}
-       
-       // Toma el arreglo y le hago un push
+        const {
+                cid,
+                pid
+        } = req.params;
 
-        const cartById = cart.find(cart => cart.id === cid);
+        //carrito por ID
+
+        const cart = carts.find(cart => cart.id === parseInt(cid));
 
 
-        if (!cartById) {
-                return res.status(404).json({ error: 'Carrito no encontrado' });
-            }
-        // verifica si existe
-
-        const indexProductInCart = cartById.products.findIndex(product => product.id === parseInt(pid));
-        if (indexProductInCart !== -1) {
-                cartById.products[indexProductInCart].quantity++;
-        } else {
-                cartById.products.push({
-                        id: parseInt(pid),
-                        quantity:1,
+        if (!cart) {
+                return res.status(404).json({
+                        error: 'Carrito no encontrado'
                 });
         }
-        //Guardar en el archivo
-        await cartManager.save(cart);
+
+        // verifica si el carro esta vacio
+
+        if (!cart.products) {
+                console.log("carro vacio");
+              }
+
+
+         // Encuentra el último id utilizado
+         const lastProductId = cart.products.length > 0 ? cart.products[cart.products.length - 1].id : 0;
+
+         // Incrementa el último id en 1 para obtener el nuevo id único
+         const newProductId = lastProductId + 1;
+ 
+         // Crea el objeto del producto con el nuevo id
+         const addedProduct = {
+                 id: newProductId,
+                 quantity: 1
+         };
+         
+        
+         
+
+        // Verificar si el producto ya existe en el carrito
+        const existingProduct = cart.products.find(p => p.id === parseInt(pid));
+
+        if (existingProduct) {
+                // Si el producto ya existe, incrementa la cantidad
+                existingProduct.quantity += 1;
+        } else {
+                // Si el producto no existe, agrégalo al arreglo "products"
+                cart.products.push(addedProduct);
+        }
+
+        // Asignar el "id" encontrado al producto
+        cart.products.id = newProductId;
+
+        await manager.addProducts(cart);
+
+        // status success
+        return res.send({
+                status: 'success',
+                message: 'product added',
+                cart
+        })
+
 });
 
 

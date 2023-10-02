@@ -32,7 +32,7 @@ class cartManager {
             const existingProduct = products.find((p) => p.id === producto.id);
             // verifica si existe
             if (existingProduct) {
-                console.log("El producto existe");
+                console.log("El carro existe");
                 return null;
             }
             // se agrega el producto
