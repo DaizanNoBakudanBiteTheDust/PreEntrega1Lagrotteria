@@ -1,130 +1,115 @@
-import { Router } from 'express';
-import ProductManager from '../managers/productManager.js';
-const manager = new ProductManager('./src/files/productos.json');
+import {
+        Router
+} from 'express';
+import cartManager from '../managers/cartManager.js';
+const manager = new cartManager('./src/files/carrito.json');
 
 
 const router = Router();
 
-// traer todos los productos
-
-router.get('/', async (req, res) =>{
-    const products = await manager.getProducts();
-    console.log(products)
-    res.send(products)
-    });
-
-    // params
-
-
-router.get('/', async (req, res) => {
-    const products = await manager.getProducts();
-    const queryParamsLimited = (req.query.limit);
-
-    if (!queryParamsLimited) {
-            res.send({error: 'Error pagina no encontrada'})
-    } else {
-            const productsLimited = products.slice(0, queryParamsLimited)
-            res.send(productsLimited)
-    };
-});
-
 // postea los productos
 
 router.post('/', async (req, res) => {
-    const products = await manager.getProducts();
-    // Productos que haremos con Postman
-    const product = req.body;
+        const cart = await manager.getAll();
+        // Productos que haremos con Postman
+        const product = req.body;
 
-    if (!product.titulo || !product.descripcion || !product.precio || !product.thumbnail || !product.thumbnail || !product.code || !product.stock || !product.category) {
-            //Error del cliente
-            return res.status(400).send({
-                    status: 'error',
-                    error: 'incomplete values'
-            })
-    }
+        const savedProduct = {};
 
-     // Obtener un array con todos los "id" existentes ( hice esto porque al eliminar productos seguia sumando indefinido y necesitaba rellenar id)
-     const existingIds = products.map(p => p.id);
+        if (!product.titulo || !product.descripcion || !product.precio || !product.thumbnail || !product.code || !product.stock || !product.category) {
+                //Error del cliente
+                return res.status(400).send({
+                        status: 'error',
+                        error: 'incomplete values'
+                })
+        }
 
-     // Encontrar el primer "id" que falta
-     let newId = 1;
-     while (existingIds.includes(newId)) {
-         newId++;
-     }
- 
-     // Asignar el "id" encontrado al producto
-     product.id = newId;
-    
+        // Obtener un array con todos los "id" existentes
+        const existingIds = cart.map(item => item.id);
 
-    await manager.addProducts(product);
+        // Encontrar el primer "id" que falta
+        let newId = 1;
+        while (existingIds.includes(newId)) {
+                newId++;
+        }
 
-    // status success
-    return res.send({
-            status: 'success',
-            message: 'product created',
-            product
-    })
+        // Asignar el "id" encontrado al producto
+        product.id = newId;
+
+
+        await manager.addProducts(product);
+
+        // status success
+        return res.send({
+                status: 'success',
+                message: 'cart product created',
+                product
+        })
 });
 
 // Actualiza los productos
 
-router.put('/:pid', async (req, res) => {
+router.put('/:cid', async (req, res) => {
 
-    const products = await manager.getProducts();
-    // Productos que haremos con Postman
-    const product = req.body;
-    const productId = Number(req.params.pid);
+        const products = await manager.getProducts();
+        // Productos que haremos con Postman
+        const product = req.body;
+        const cartId = Number(req.params.cid);
 
-    if (!product.titulo || !product.descripcion || !product.precio || !product.thumbnail || !product.thumbnail || !product.code || !product.stock) {
-            //Error del cliente
-            return res.status(400).send({
-                    status: 'error',
-                    error: 'incomplete values'
-            })
-    }
+        if (!product.quantity || !product.descripcion || !product.precio || !product.thumbnail || !product.thumbnail || !product.code || !product.stock) {
+                //Error del cliente
+                return res.status(400).send({
+                        status: 'error',
+                        error: 'incomplete values'
+                })
+        }
 
-    const index = products.findIndex(product => product.id === productId);
+        const index = products.findIndex(product => product.id === cartId);
 
-    if (index !== 1) {
-            await manager.updateProduct(productId, product);
-            res.send({
-                    status: 'success',
-                    message: 'product updated',
-                    product
-            });
-    } else {
-            //Error del cliente
-            return res.status(404).send({
-                    status: 'error',
-                    error: 'product not found'
-            })
-    }
+        if (index !== -1) {
+                await manager.updateProduct(cartId, product);
+                res.send({
+                        status: 'success',
+                        message: 'product updated',
+                        product
+                });
+        } else {
+                //Error del cliente
+                return res.status(404).send({
+                        status: 'error',
+                        error: 'product not found'
+                })
+        }
 
 });
 
-// Elimina los productos
 
-router.delete('/:pid', async (req, res) => {
-    const products = await manager.getProducts();
-    
-    const productId = Number(req.params.pid);
-await manager.deleteProductById(productId);
-    const index = products.findIndex(product => product.id === productId);
+router.post('/:cid/products/pid', async (req, res) => {
 
-    if (index !== 1) {
-            await manager.deleteProductById(productId); 
-            res.send({
-                    status: 'success',
-                    message: 'product deleted',
-                    product
-            });
-    } else {
-            //Error del cliente
-            return res.status(404).send({
-                    status: 'error',
-                    error: 'product not exist'
-            })
-    }
-})
+        const cart = await manager.getAll();
+        const { cid, pid } = req.params;
+        // Toma el arreglo y le hago un push
+
+        const cartById = cart.find(cart => cart.id === cid);
+
+
+        if (!cartById) {
+                return res.status(404).json({ error: 'Carrito no encontrado' });
+            }
+        // verifica si existe
+
+        const indexProductInCart = cartById.products.findIndex(product => product.id === parseInt(pid));
+        if (indexProductInCart === -1) {
+                cartById.products[indexProductInCart].quantity++;
+        } else {
+                cartById.products.push({
+                        id: parseInt(pid),
+                        quantity:1,
+                });
+        }
+        //Guardar en el archivo
+        await cartManager.save(cart);
+});
+
 
 export default router;
