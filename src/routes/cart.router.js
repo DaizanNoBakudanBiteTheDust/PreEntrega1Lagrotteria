@@ -2,7 +2,9 @@ import {
         Router
 } from 'express';
 import cartManager from '../managers/cartManager.js';
-import { cartsFilePath } from '../utils.js';
+import {
+        cartsFilePath
+} from '../utils.js';
 
 const manager = new cartManager(cartsFilePath);
 
@@ -79,16 +81,12 @@ router.post('/:cid/products/pid', async (req, res) => {
         const carts = await manager.getAll();
 
         // utilizo params de carrito y producto
-
-        const {
-                cid,
-                pid
-        } = req.params;
+        const cartId = Number(req.params.cid);
+        const productId = Number(req.params.pid)
 
         //carrito por ID
 
-        const cart = carts.find(cart => cart.id === parseInt(cid));
-
+        const cart = await manager.getProductById(cartId);
 
         if (!cart) {
                 return res.status(404).json({
@@ -98,39 +96,26 @@ router.post('/:cid/products/pid', async (req, res) => {
 
         // verifica si el carro esta vacio
 
-        if (!cart.products) {
+        if (!cart.products || cart.products.length === 0) {
                 console.log("carro vacio");
-              }
+        }
 
-
-         // Encuentra el último id utilizado
-         const lastProductId = cart.products.length > 0 ? cart.products[cart.products.length - 1].id : 0;
-
-         // Incrementa el último id en 1 para obtener el nuevo id único
-         const newProductId = lastProductId + 1;
- 
-         // Crea el objeto del producto con el nuevo id
-         const addedProduct = {
-                 id: newProductId,
-                 quantity: 1
-         };
-         
-        
-         
-
-        // Verificar si el producto ya existe en el carrito
-        const existingProduct = cart.products.find(p => p.id === parseInt(pid));
+        const existingProduct = cart.products.find(product => product.id === productId);
 
         if (existingProduct) {
                 // Si el producto ya existe, incrementa la cantidad
                 existingProduct.quantity += 1;
         } else {
                 // Si el producto no existe, agrégalo al arreglo "products"
-                cart.products.push(addedProduct);
+                const addedProduct = {
+                        product: productId,
+                        quantity: 1
+                      };
+                      cart.products.push(addedProduct);
         }
 
-        // Asignar el "id" encontrado al producto
-        cart.products.id = newProductId;
+         // Actualiza el carrito con los cambios
+         await manager.updateProduct(cartId, cart);
 
         await manager.addProducts(cart);
 
