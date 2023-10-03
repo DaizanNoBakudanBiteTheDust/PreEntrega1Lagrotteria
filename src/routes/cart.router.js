@@ -76,7 +76,7 @@ router.post('/', async (req, res) => {
 });
 
 
-router.post('/:cid/products/pid', async (req, res) => {
+router.post('/:cid/products/:pid', async (req, res) => {
 
         const carts = await manager.getAll();
 
@@ -106,16 +106,24 @@ router.post('/:cid/products/pid', async (req, res) => {
                 // Si el producto ya existe, incrementa la cantidad
                 existingProduct.quantity += 1;
         } else {
-                // Si el producto no existe, agrégalo al arreglo "products"
+                // Si el producto no existe, obtén el último ID de producto
+                const lastProductId = cart.products.length > 0 ? cart.products[cart.products.length - 1].id : 0;
+
+                // Incrementa el último ID en 1 para obtener el nuevo ID único
+                const newProductId = lastProductId + 1;
+
+                // Crea el objeto del producto con el nuevo ID y cantidad inicial de 1
                 const addedProduct = {
-                        product: productId,
+                        id: newProductId,
                         quantity: 1
-                      };
-                      cart.products.push(addedProduct);
+                };
+
+                // Agrega el producto al arreglo "products" del carrito
+                cart.products.push(addedProduct);
         }
 
-         // Actualiza el carrito con los cambios
-         await manager.updateProduct(cartId, cart);
+        // Actualiza el carrito con los cambios
+        await manager.updateProduct(cartId, cart);
 
         await manager.addProducts(cart);
 

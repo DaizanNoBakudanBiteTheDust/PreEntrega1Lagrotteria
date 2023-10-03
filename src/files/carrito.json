@@ -2,19 +2,11 @@
     {
         "products": [
             {
-                "product": null,
-                "quantity": 1
+                "id": 1,
+                "quantity": 3
             },
             {
-                "product": null,
-                "quantity": 1
-            },
-            {
-                "product": null,
-                "quantity": 1
-            },
-            {
-                "product": null,
+                "id": 2,
                 "quantity": 1
             }
         ],
