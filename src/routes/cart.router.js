@@ -37,6 +37,17 @@ router.get('/', async (req, res) => {
 });
 
 
+router.get('/:cid', async (req, res) => {
+        const cartId = Number(req.params.cid);
+
+         //carrito por ID
+
+         const cart = await manager.getProductById(cartId);
+     
+       res.send(cart);
+});
+
+
 // postea los productos
 
 router.post('/', async (req, res) => {
