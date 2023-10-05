@@ -13,7 +13,7 @@ const router = Router();
 router.get('/', async (req, res) => {
         const products = await manager.getProducts();
         console.log(products)
-        res.send(products)
+        
 });
 
 // params
@@ -28,8 +28,12 @@ router.get('/', async (req, res) => {
                         error: 'Error pagina no encontrada'
                 })
         } else {
-                const productsLimited = products.slice(0, queryParamsLimited)
+                if(queryParamsLimited){
+                        const productsLimited = products.slice(0, queryParamsLimited)
                 res.send(productsLimited)
+                }else{
+                        res.send(products);
+                }
         };
 });
 
@@ -55,6 +59,15 @@ router.post('/', async (req, res) => {
         let newId = 1;
         while (existingIds.includes(newId)) {
                 newId++;
+        }
+
+        // Verificar la existencia del "code" en productos existentes
+        const existingCodes = products.map(p => p.code);
+        if (existingCodes.includes(product.code)) {
+            return res.status(409).send({
+                status: 'error',
+                error: 'El producto con este código ya existe.'
+            });
         }
 
         // Asignar el "id" encontrado al producto
