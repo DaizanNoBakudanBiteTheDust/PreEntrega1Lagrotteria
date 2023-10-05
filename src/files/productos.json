@@ -224,5 +224,16 @@
 		"stock": 12,
 		"category": "general",
 		"id": 24
+	},
+	{
+		"titulo": "segundo producto",
+		"descripcion": "para cuadros",
+		"precio": 30,
+		"status": "ok",
+		"thumbnail": "https://www.avalco.cl/3650-thickbox_default/escoba5costuras.jpg",
+		"code": "12121223",
+		"stock": 12,
+		"category": "general",
+		"id": 25
 	}
 ]
