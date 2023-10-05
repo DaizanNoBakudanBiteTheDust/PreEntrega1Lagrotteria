@@ -57,15 +57,6 @@ router.post('/', async (req, res) => {
                 newId++;
         }
 
-        // Verificar la existencia del "code" en productos existentes
-        const existingCodes = products.map(p => p.code);
-        if (existingCodes.includes(product.code)) {
-            return res.status(409).send({
-                status: 'error',
-                error: 'El producto con este código ya existe.'
-            });
-        }
-
         // Asignar el "id" encontrado al producto
         product.id = newId;
 
